@@ -5,10 +5,6 @@ class Station(models.Model):
     number = models.PositiveIntegerField(primary_key=True, unique=True)
     address = models.CharField(max_length=200)
     location = models.PointField(geography=True, default=Point(0.0, 0.0), unique=True)
-    last_updated = models.DateTimeField(auto_now_add=True)
-    available_bikes = models.IntegerField(default=0)
-    total_capacity = models.IntegerField(default=0)
-    is_open = models.BooleanField(default=True)
 
     @property
     def longitude(self):
@@ -17,3 +13,10 @@ class Station(models.Model):
     @property
     def latitude(self):
         return self.location.y
+    
+class StationStatus(models.Model):
+    station = models.ForeignKey(Station, on_delete=models.CASCADE)
+    is_open = models.BooleanField(default=True)
+    available_bikes = models.IntegerField(default=0)
+    total_capacity = models.IntegerField(default=0)
+    last_updated = models.DateTimeField()
