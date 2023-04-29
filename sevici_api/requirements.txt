@@ -1,3 +1,4 @@
+APScheduler==3.10.1
 asgiref==3.6.0
 backports.zoneinfo==0.2.1
 certifi==2022.12.7
@@ -14,7 +15,11 @@ Markdown==3.4.3
 psycopg2-binary==2.9.6
 python-dotenv==1.0.0
 pytz==2023.3
+pytz-deprecation-shim==0.1.0.post0
 requests==2.29.0
+six==1.16.0
 sqlparse==0.4.4
+tzdata==2023.3
+tzlocal==4.3
 urllib3==1.26.15
 zipp==3.15.0

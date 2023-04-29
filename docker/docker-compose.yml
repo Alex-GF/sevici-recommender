@@ -37,9 +37,9 @@ services:
       DB_PORT: ${DB_PORT}
       API_KEY: ${SEVICI_API_KEY}
 
-    # volumes:
-    #   - static:/usr/src/app/sevici-api/static
-    #   - static:/usr/src/app/sevici-api/media
+    volumes:
+      - static:/usr/src/app/sevici-api/static
+      # - static:/usr/src/app/sevici-api/media
     expose:
       - 8000
     depends_on:
@@ -78,9 +78,9 @@ services:
     build:
         context: ../nginx
         dockerfile: ./Dockerfile
-    # volumes:
-    #   - static:/usr/src/app/sevici-api/static
-    #   - static:/usr/src/app/sevici-api/media
+    volumes:
+      - static:/usr/src/app/sevici-api/static
+      # - static:/usr/src/app/sevici-api/media
     ports:
       - 80:80
     depends_on:
@@ -90,8 +90,8 @@ services:
       - sevici
 
 volumes:
-  # static:
-  #   name: flatter-static
+  static:
+    name: sevici-static
   # redis-data:
   #   name: flatter-redis-data
   db:
