@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.contrib.gis.geos import Point
 from data_manager.models import Station, StationStatus
-import os, requests
+import requests
 
 class Command(BaseCommand):
         
@@ -23,7 +23,7 @@ class Command(BaseCommand):
 
         data = r.json()
         stations_status = []
-        
+
         for station in data:
 
             number = station['number']

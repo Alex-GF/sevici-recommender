@@ -1,5 +1,6 @@
 from pathlib import Path
 from dotenv import load_dotenv
+from glob import glob
 import os
 
 load_dotenv()
@@ -15,7 +16,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 1)
 
 ALLOWED_HOSTS = []
 
@@ -80,6 +81,8 @@ DATABASES = {
         'NAME': "sevici_db",
         'USER': os.environ.get('DB_USER', ''),
         'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
 
@@ -118,7 +121,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_URL = 'api/static/'
+MEDIA_URL = 'api/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -141,3 +147,9 @@ REST_FRAMEWORK = {
 
 API_KEY = os.environ.get('API_KEY', '')
 CONTRACT = os.environ.get('CONTRACT', '')
+
+# GDAL CONFIGURATION
+
+if os.environ.get('DJANGO_ENV', '') == "production":
+    GDAL_LIBRARY_PATH=glob('/usr/lib/libgdal.so.*')[0]
+    GEOS_LIBRARY_PATH=glob('/usr/lib/libgeos_c.so.*')[0]

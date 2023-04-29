@@ -1,0 +1,107 @@
+version: '3'
+
+services:
+  db:
+    restart: always
+    container_name: sevici-db
+    image: postgis/postgis:15-3.3-alpine
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      - sevici
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+  backend:
+    restart: always
+    container_name: sevici-api
+    image: sevici-api:latest
+    build: 
+      context: ..
+      dockerfile: ./docker/backend/Dockerfile
+    command: bash -c "/usr/src/app/sevici-api/entrypoint.sh  && gunicorn --bind 0.0.0.0:8000 sevici_api.wsgi"
+    environment:
+      DEBUG: ${DEBUG}
+      DJANGO_ENV: ${DJANGO_ENV}
+      DJANGO_ADMIN_USER: ${DJANGO_ADMIN_USER}
+      DJANGO_ADMIN_EMAIL: ${DJANGO_ADMIN_EMAIL}
+      DJANGO_ADMIN_PASSWORD: ${DJANGO_ADMIN_PASSWORD}
+      SECRET_KEY: ${SECRET_KEY}
+      DATABASE: ${DATABASE}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      API_KEY: ${SEVICI_API_KEY}
+
+    # volumes:
+    #   - static:/usr/src/app/sevici-api/static
+    #   - static:/usr/src/app/sevici-api/media
+    expose:
+      - 8000
+    depends_on:
+      - db
+      # - redis
+    links:
+      - db
+      # - redis
+    networks:
+      - sevici
+
+  # client:
+  #   restart: always
+  #   container_name: sevici-client
+  #   image: sevici-client:latest
+  #   build: 
+  #     context: ..
+  #     dockerfile: ./docker/client/Dockerfile
+  #     args:
+  #       API_SERVER: ${API_SERVER_URL}
+  #   environment:
+  #     NODE_ENV: ${NODE_ENV}
+  #     REACT_APP_PAYPAL_CLIENT_ID: ${REACT_APP_PAYPAL_CLIENT_ID}
+  #   command: sh -c "serve -s build -l 3000 --no-clipboard"
+  #   depends_on:
+  #     - backend
+  #   expose:
+  #     - 3000
+  #   networks:
+  #     - sevici
+
+  nginx:
+    restart: always
+    container_name: sevici-nginx
+    image: sevici-nginx:latest
+    build:
+        context: ../nginx
+        dockerfile: ./Dockerfile
+    # volumes:
+    #   - static:/usr/src/app/sevici-api/static
+    #   - static:/usr/src/app/sevici-api/media
+    ports:
+      - 80:80
+    depends_on:
+      - backend
+      # - client
+    networks:
+      - sevici
+
+volumes:
+  # static:
+  #   name: flatter-static
+  # redis-data:
+  #   name: flatter-redis-data
+  db:
+    name: sevici-db
+
+
+networks:
+  sevici:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.5.0.0/16
