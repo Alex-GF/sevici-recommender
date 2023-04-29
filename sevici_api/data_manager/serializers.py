@@ -8,12 +8,15 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = ['url', 'username', 'email', 'is_staff']
 
-class StationSerializer(serializers.HyperlinkedModelSerializer):
+class StationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Station
         fields = '__all__'
 
-class StationStatusSerializer(serializers.HyperlinkedModelSerializer):
+class StationStatusSerializer(serializers.ModelSerializer):
+    station = StationSerializer
     class Meta:
         model = StationStatus
-        fields = ['is_open', 'available_bikes', 'total_capacity', 'last_updated']
+        fields = '__all__'
+        depth = 1
+        
