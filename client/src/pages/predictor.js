@@ -1,11 +1,28 @@
 import "leaflet/dist/leaflet.css";
 import "../static/css/filterButton.css";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMapEvent } from "react-leaflet";
 import FormGenerator from "../components/formGenerator/formGenerator";
 import { filterStationsInputs } from "../forms/filterStationsForm";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 
-const Home = () => {
+function MovingMarker({position, setPosition}) {
+    const markerRef = useRef(null)
+    const map = useMapEvent('click', (e) => {
+    console.log("click")
+      setPosition(e.latlng)
+    })
+    
+    return (
+      <Marker
+        position={position}
+        ref={markerRef}>
+      </Marker>
+      
+    )
+  }
+
+const Predictor = () => {
+  const [position, setPosition] = useState([0,0])
   const filterFormRef = useRef(null);
 
   function handleSubmit({ values }) {
@@ -22,14 +39,14 @@ const Home = () => {
       <div className="flex h-[80%] lg:w-[80%] w-[90%] lg:flex-row flex-col-reverse items-center justify-between">
         <div className="flex h-auto flex-col lg:w-1/4 w-[80%] lg:mt-0 mt-10 items-center justify-center rounded-md bg-white p-5 pt-12">
           <h2 className="h-50% py-5 text-xl font-extrabold text-black underline underline-offset-4 lg:text-4xl">
-            Filtros:
+            Parámetros:
           </h2>
           <FormGenerator
             ref={filterFormRef}
             inputs={filterStationsInputs}
             onSubmit={handleSubmit}
             childrenPosition={-1}
-            buttonText="Filtrar"
+            buttonText="Recomiéndame"
             buttonClassName="filterButton"
             scrollable
           />
@@ -45,11 +62,7 @@ const Home = () => {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <Marker position={[37.3828300, -5.9731700]}>
-              <Popup>
-                A pretty CSS3 popup. <br /> Easily customizable.
-              </Popup>
-            </Marker>
+            <MovingMarker position={position} setPosition={setPosition}/>
           </MapContainer>
         </div>
       </div>
@@ -57,4 +70,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Predictor;
