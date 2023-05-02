@@ -31,8 +31,6 @@ const Home = () => {
 
     query = query.slice(0, -1);
 
-    console.log(query);
-
     fetch(query)
       .then((response) => response.json())
       .then((data) => {
