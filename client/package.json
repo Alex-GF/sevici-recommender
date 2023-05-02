@@ -22,7 +22,7 @@
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "concurrently \"yarn tailwindcss -i ./src/global.css -o ./src/tailwind.css --watch\" \"react-scripts start\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -46,6 +46,7 @@
     ]
   },
   "devDependencies": {
+    "concurrently": "^8.0.1",
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.2.7",
     "tailwindcss": "^3.3.2"
