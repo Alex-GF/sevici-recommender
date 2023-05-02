@@ -100,15 +100,17 @@ const Home = () => {
                   return (
                     <Marker position={[xCoord, yCoord]} key={index}>
                       <Popup>
-                        {station.station.address} <br /> <br />
+                        <strong>Estación nº {station.station.number}: {station.station.address}</strong>
+                        <br /> <br />
                         Bicicletas disponibles: {
                           station.available_bikes
-                        } <br /> <br />
-                        Capacidad de la estación: {
-                          station.station.capacity
-                        }{" "}
+                        } 
                         <br /> <br />
-                        Estado: {station.station.status}
+                        Capacidad de la estación: {
+                          station.total_capacity
+                        }
+                        <br /> <br />
+                        Estado: {station.is_open? "Abierta" : "Cerrada"}
                       </Popup>
                     </Marker>
                   );

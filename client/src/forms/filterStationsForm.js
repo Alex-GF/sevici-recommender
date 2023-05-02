@@ -1,19 +1,21 @@
+import { filterStationsValidators } from '../libs/validators/filterStationsValidators';
+
 export const filterStationsInputs = [
     {
       tag: 'Bicis disponibles',
       name: 'available-bikes',
       type: 'number',
-      defaultValue: "1",
+      defaultValue: "",
       isRequired: false,
-      validators: []
+      validators: [filterStationsValidators.notNegativeNumber]
     },
     {
       tag: 'Capacidad de la estación',
       name: 'station-capacity',
       type: 'number',
-      defaultValue: "1",
+      defaultValue: "",
       isRequired: false,
-      validators: []
+      validators: [filterStationsValidators.notNegativeNumber]
     },
     {
       tag: 'Estado',
@@ -22,22 +24,22 @@ export const filterStationsInputs = [
       values: ["Cualquiera", "Abierta", "Cerrada"],
       defaultValue: "Cualquiera",
       isRequired: false,
+      validators: [filterStationsValidators.validStatus]
+    },
+    {
+      tag: "Fecha",
+      name: "date",
+      type: "date",
+      defaultValue: "",
+      isRequired: false,
+      validators: [filterStationsValidators.notFutureDate]
+    },
+    {
+      tag: "Hora",
+      name: "time",
+      type: "time",
+      defaultValue: "",
+      isRequired: false,
       validators: []
-    },
-    {
-        tag: "Fecha",
-        name: "date",
-        type: "date",
-        defaultValue: "2023-03-01",
-        isRequired: false,
-        validators: []
-    },
-    {
-        tag: "Hora",
-        name: "time",
-        type: "time",
-        defaultValue: "20:00",
-        isRequired: false,
-        validators: []
     }
 ]
