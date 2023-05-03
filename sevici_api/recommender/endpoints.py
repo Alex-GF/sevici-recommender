@@ -73,8 +73,11 @@ def bikes_predictors_mean(request):
         return Response({"error": "You can't predict the past"}, status=status.HTTP_400_BAD_REQUEST)
     
     mean_prediction = _mean_predictor(station, date.date(), date.time())
+    
+    station_status_progression = StationStatus.objects.filter(station__number=station_number_param, last_updated__lte=date, last_updated__gte=date-timezone.timedelta(days=30)).order_by('last_updated')
+    function_points = [{"x": s.last_updated.timestamp(), "y": s.available_bikes} for s in station_status_progression]
 
-    response_data = {"prediction": [date.timestamp(), mean_prediction[0]], "evolution": mean_prediction[1], "station": station}
+    response_data = {"prediction": [date.timestamp(), mean_prediction], "evolution": function_points, "station": station}
     
     result = StationPredictorMeanSerializer(response_data).data
     return Response(result, status=status.HTTP_200_OK)
@@ -86,8 +89,7 @@ def _mean_predictor(station, date, hour):
     station_status_all = StationStatus.objects.filter(station=station, last_updated__gte=max_date)
     station_status_minor = station_status_all.filter(last_updated__time__lte=hour).order_by("-last_updated__time")
     station_status_major = station_status_all.filter(last_updated__time__gte=hour).order_by("last_updated__time")
-
-    result = []
+    
     last_dates = set()
     bikes = 0
     total = 0
@@ -102,18 +104,14 @@ def _mean_predictor(station, date, hour):
             last_dates.add(tuple_date)
             bikes += round((ss_minor.available_bikes+ss_major.available_bikes)/2)
             total += 1
-            result.append({"x": ss_major.last_updated.timestamp(), "y": round((ss_minor.available_bikes+ss_major.available_bikes)/2)})
             
    
     penalization = abs((date-timezone.now().date()).days)
     
     avg = round((bikes/total)*(1-penalization*(0.05))) if total else 0
     
-    station_status_progression = StationStatus.objects.filter(station=station, last_updated__lte=date, last_updated__gte=max_date).order_by('last_updated')
-    function_points = [{"x": s.last_updated.timestamp(), "y": s.available_bikes} for s in station_status_progression]
-    
 
-    return avg, function_points
+    return avg
 
 def _linear_regresion_predictor(parsed_date, station_status_progression):
     

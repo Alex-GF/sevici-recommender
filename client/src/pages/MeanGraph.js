@@ -2,11 +2,16 @@ import { useEffect, useState } from "react";
 import Plot from "react-plotly.js";
 import CompassLoader from "../components/compassLoader";
 
-export default function Graphs() {
+export default function MeanGraph({
+  date,
+  hour,
+  stationNumber,
+  width,
+  height,
+}) {
   let [points, setPoints] = useState([]);
-  let [linearFunctionPoints, setLinearFunctionPoints] = useState([]);
+  let [predictionPoint, setPredictionPoint] = useState({});
   let [dataLoaded, setDataLoaded] = useState(false);
-  let [firstLoad, setFirstLoad] = useState(true);
   let [yLimits, setYLimits] = useState([0, 50]);
 
   function handleSubmit({ values }) {
@@ -16,7 +21,11 @@ export default function Graphs() {
 
     for (let key in values) {
       if (values[key]) {
-        query += `${key}=${values[key]}&`;
+        if (key === "hour") {
+          query += `${key}=${values[key]}:00&`;
+        } else {
+          query += `${key}=${values[key]}&`;
+        }
       }
     }
 
@@ -33,31 +42,17 @@ export default function Graphs() {
 
         setPoints(sortedListOfPoints);
 
-        let linearPoints = [];
-
         let originTimestamp = sortedListOfPoints[0].x;
 
-        for (let point of sortedListOfPoints) {
-          linearPoints.push({
-            x: point.x,
-            y:
-              data.linear_function.coef * (point.x - originTimestamp) +
-              data.linear_function.intercept,
-          });
-        }
-        console.log(data.linear_function.coef, data.linear_function.intercept);
-        for (let i = 1; i <= 7; i++) {
-          let xPoint =
-            sortedListOfPoints[sortedListOfPoints.length - 1].x + i * 86400;
+        console.log({
+          x: data.prediction[0],
+          y: data.prediction[1],
+        });
 
-          linearPoints.push({
-            x: xPoint,
-            y:
-              data.linear_function.coef * (xPoint - originTimestamp) +
-              data.linear_function.intercept,
-          });
-        }
-        setLinearFunctionPoints(linearPoints);
+        setPredictionPoint({
+          x: data.prediction[0],
+          y: data.prediction[1],
+        });
         // setFilterValues(values);
         setDataLoaded(true);
       })
@@ -65,24 +60,24 @@ export default function Graphs() {
   }
 
   useEffect(() => {
-    // if (dataLoaded) {
-    //   document.getElementsByClassName("class-form")[0].style.justifyContent =
-    //     "start";
-    // }
-    if (firstLoad) {
+
+    if (!dataLoaded) {
       handleSubmit({
         values: {
-          date: "2023-05-03",
-          hour: "23:30:00",
-          stationNumber: "194",
+          date: date,
+          hour: hour,
+          stationNumber: stationNumber,
         },
       });
-      setFirstLoad(false);
     }
   }, [dataLoaded]);
 
+  useEffect(() => {
+    setDataLoaded(false);
+  }, [stationNumber]);
+
   return (
-    <div className="flex h-screen w-screen flex-col items-center justify-center bg-slate-200 bg-opacity-80 bg-[radial-gradient(#444cf7_0.5px,_transparent_0.5px),_radial-gradient(#444cf7_0.5px,_#e5e5f7_0.5px)] bg-[length:20px_20px]">
+    <>
       {!dataLoaded ? (
         <CompassLoader />
       ) : (
@@ -96,23 +91,23 @@ export default function Graphs() {
               marker: { color: "blue" },
             },
             {
-              x: linearFunctionPoints.map((point) => new Date(point.x)),
-              y: linearFunctionPoints.map((point) => point.y),
+              x: [new Date(predictionPoint.x)],
+              y: [predictionPoint.y],
               type: "scatter",
               mode: "lines+markers",
               marker: { color: "red" },
             },
           ]}
           layout={{
-            width: 1000,
-            height: 800,
-            title: "Predicción con regresión",
+            width: width,
+            height: height,
+            title: "Predicción con media",
             yaxis: {
               range: yLimits,
             },
           }}
         />
       )}
-    </div>
+    </>
   );
 }
