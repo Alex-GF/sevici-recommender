@@ -70,8 +70,10 @@ def bikes_predictors_mean(request):
 
     if is_future != abs(is_future):
         return Response({"error": "You can't predict the past"}, status=status.HTTP_400_BAD_REQUEST)
+    
+    mean_prediction = _mean_predictor(station, date.date(), date.time())
 
-    response_data = {"prediction": [date.timestamp(), _mean_predictor(station, date.date(), date.time())], "station": station}
+    response_data = {"prediction": [date.timestamp(), mean_prediction[0]], "evolution": mean_prediction[1], "station": station}
     
     result = StationPredictorMeanSerializer(response_data).data
     return Response(result, status=status.HTTP_200_OK)
@@ -93,14 +95,18 @@ def _mean_predictor(station, date, hour):
             last_dates.add(tuple_date)
             bikes += round((ss_minor.available_bikes+ss_major.available_bikes)/2)
             total += 1
-            result.append((date, round((ss_minor.available_bikes+ss_major.available_bikes)/2)))
+            result.append({"x": ss_major.last_updated.timestamp(), "y": round((ss_minor.available_bikes+ss_major.available_bikes)/2)})
             
-    print(result)
+   
     penalization = abs((date-timezone.now().date()).days)
     
     avg = round((bikes/total)*(1-penalization*(0.05))) if total else 0
+    
+    station_status_progression = StationStatus.objects.filter(station=station, last_updated__lte=date, last_updated__gte=date-timezone.timedelta(days=30)).order_by('last_updated')
+    function_points = [{"x": s.last_updated.timestamp(), "y": s.available_bikes} for s in station_status_progression]
+    
 
-    return avg
+    return avg, function_points
 
 def _linear_regresion_predictor(parsed_date, station_status_progression):
     

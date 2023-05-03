@@ -17,4 +17,5 @@ class StationPredictorLinearSerializer(serializers.Serializer):
 
 class StationPredictorMeanSerializer(serializers.Serializer):
    prediction = serializers.ListField()
+   evolution = serializers.ListField(child=PointSerializer())
    station = StationSerializer()
