@@ -12,7 +12,7 @@ export default function Graphs() {
   function handleSubmit({ values }) {
     setDataLoaded(false);
 
-    let query = "http://localhost:8000/api/station/?";
+    let query = "http://localhost:8000/api/predictors/mean?";
 
     for (let key in values) {
       if (values[key]) {
