@@ -7,6 +7,7 @@ from data_manager.models import StationStatus
 from .serializers import StationPredictorLinearSerializer, StationPredictorMeanSerializer
 from django.utils import timezone
 from sklearn.linear_model import LinearRegression
+import itertools
 
 @api_view(['GET'])
 @permission_classes((permissions.AllowAny,))
@@ -78,6 +79,8 @@ def bikes_predictors_mean(request):
     result = StationPredictorMeanSerializer(response_data).data
     return Response(result, status=status.HTTP_200_OK)
 
+
+
 def _mean_predictor(station, date, hour):
     max_date = date-timezone.timedelta(days=30)
     station_status_all = StationStatus.objects.filter(station=station, last_updated__gte=max_date)
@@ -89,7 +92,11 @@ def _mean_predictor(station, date, hour):
     bikes = 0
     total = 0
     
-    for ss_minor, ss_major in zip(station_status_minor, station_status_major):
+    for ss_minor, ss_major in itertools.zip_longest(station_status_minor, station_status_major):
+        if ss_minor is None:
+            ss_minor = ss_major
+        if ss_major is None:
+            ss_major = ss_minor
         tuple_date = (ss_minor.last_updated.day, ss_minor.last_updated.month, ss_minor.last_updated.year)
         if tuple_date not in last_dates:
             last_dates.add(tuple_date)
@@ -102,7 +109,7 @@ def _mean_predictor(station, date, hour):
     
     avg = round((bikes/total)*(1-penalization*(0.05))) if total else 0
     
-    station_status_progression = StationStatus.objects.filter(station=station, last_updated__lte=date, last_updated__gte=date-timezone.timedelta(days=30)).order_by('last_updated')
+    station_status_progression = StationStatus.objects.filter(station=station, last_updated__lte=date, last_updated__gte=max_date).order_by('last_updated')
     function_points = [{"x": s.last_updated.timestamp(), "y": s.available_bikes} for s in station_status_progression]
     
 
