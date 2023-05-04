@@ -619,6 +619,10 @@ video {
   display: flex;
 }
 
+.h-2\/4 {
+  height: 50%;
+}
+
 .h-\[80\%\] {
   height: 80%;
 }
@@ -639,18 +643,6 @@ video {
   height: 100vh;
 }
 
-.h-2\/4 {
-  height: 50%;
-}
-
-.h-3\/4 {
-  height: 75%;
-}
-
-.h-1\/4 {
-  height: 25%;
-}
-
 .max-h-\[1000px\] {
   max-height: 1000px;
 }
@@ -669,10 +661,6 @@ video {
 
 .w-screen {
   width: 100vw;
-}
-
-.w-3\/4 {
-  width: 75%;
 }
 
 .max-w-xl {
@@ -755,6 +743,11 @@ video {
   padding: 2rem;
 }
 
+.px-10 {
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+}
+
 .px-4 {
   padding-left: 1rem;
   padding-right: 1rem;
@@ -770,32 +763,12 @@ video {
   padding-bottom: 1.25rem;
 }
 
-.px-5 {
-  padding-left: 1.25rem;
-  padding-right: 1.25rem;
-}
-
-.px-10 {
-  padding-left: 2.5rem;
-  padding-right: 2.5rem;
-}
-
 .pt-12 {
   padding-top: 3rem;
 }
 
 .text-center {
   text-align: center;
-}
-
-.text-xl {
-  font-size: 1.25rem;
-  line-height: 1.75rem;
-}
-
-.text-4xl {
-  font-size: 2.25rem;
-  line-height: 2.5rem;
 }
 
 .text-3xl {
@@ -805,6 +778,11 @@ video {
 
 .text-lg {
   font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
   line-height: 1.75rem;
 }
 
@@ -830,12 +808,12 @@ video {
   text-decoration-line: underline;
 }
 
-.underline-offset-4 {
-  text-underline-offset: 4px;
-}
-
 .underline-offset-2 {
   text-underline-offset: 2px;
+}
+
+.underline-offset-4 {
+  text-underline-offset: 4px;
 }
 
 .transition {
