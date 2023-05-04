@@ -7,6 +7,13 @@ export const filterStationsValidators = {
         },
         message: "El campo debe ser un estado válido",
     },
+    validMethod: {
+        validate: (value) => {
+            let validStatus = ['Media', 'Regresión'];
+            return validStatus.includes(value);
+        },
+        message: "El campo debe ser un método válido",
+    },
     notFutureDate: {
         validate: (value) => {
             return new Date(value) < new Date();
@@ -18,6 +25,12 @@ export const filterStationsValidators = {
             return value >= 0;
         },
         message: "El campo no puede ser un número negativo"
+    },
+    notNegativeOrZeroNumber: {
+        validate: (value) => {
+            return value > 0;
+        },
+        message: "El campo debe ser mayor que 0"
     }
 
 }
