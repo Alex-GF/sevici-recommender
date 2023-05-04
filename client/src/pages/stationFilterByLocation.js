@@ -8,10 +8,9 @@ import {
   useMapEvent,
 } from "react-leaflet";
 import FormGenerator from "../components/formGenerator/formGenerator";
-import { bestStationPredictorInputs } from "../forms/bestStationPredictorForm";
+import { filterStationByLocationInputs } from "../forms/filterStationByLocationForm";
 import { useRef, useEffect, useState } from "react";
 import CompassLoader from "../components/compassLoader";
-import RoutedMap from "../components/maps/RoutedMap";
 import ReturnButton from "../components/returnButton";
 import L from "leaflet";
 
@@ -29,12 +28,11 @@ const originIcon = L.icon({
   iconSize: [30, 30],
 });
 
-const Predictor = () => {
+const StationFilterByLocation = () => {
   let [position, setPosition] = useState([37.38283, -5.97317]);
   let [positionLoaded, setPositionLoaded] = useState(false);
   let [predicted, setPredicted] = useState(false);
   let [predictedStations, setPredictedStations] = useState([]);
-  let [destinationStation, setDestinationStation] = useState(null);
   const bestStationFormRef = useRef(null);
 
   function handleSubmit({ values }) {
@@ -42,14 +40,11 @@ const Predictor = () => {
 
     setPositionLoaded(false);
     setPredicted(false);
-    setDestinationStation(null);
 
     values["latitude"] = position[0];
     values["longitude"] = position[1];
 
-    values["method"] = values["method"] === "Media" ? "mean" : "linear";
-
-    let query = "http://localhost:8000/api/predictors/nearby?";
+    let query = "http://localhost:8000/api/stations/nearby?";
 
     for (let key in values) {
       if (values[key]) {
@@ -66,7 +61,8 @@ const Predictor = () => {
     fetch(query)
       .then((response) => response.json())
       .then((data) => {
-        setPredictedStations(data);
+        console.log(data.results);
+        setPredictedStations(data.results);
         setPositionLoaded(false);
         setPredicted(true);
       })
@@ -87,8 +83,6 @@ const Predictor = () => {
     );
   }, []);
 
-  useEffect(() => {}, [destinationStation]);
-
   return (
     <div className="relative flex h-screen w-screen flex-col items-center justify-center bg-slate-200 bg-opacity-80 bg-[radial-gradient(#444cf7_0.5px,_transparent_0.5px),_radial-gradient(#444cf7_0.5px,_#e5e5f7_0.5px)] bg-[length:20px_20px]">
       <ReturnButton/>
@@ -99,7 +93,7 @@ const Predictor = () => {
           </h2>
           <FormGenerator
             ref={bestStationFormRef}
-            inputs={bestStationPredictorInputs}
+            inputs={filterStationByLocationInputs}
             onSubmit={handleSubmit}
             childrenPosition={-1}
             buttonText="Recomiéndame"
@@ -111,7 +105,7 @@ const Predictor = () => {
         <div className="flex h-full w-full items-center justify-center lg:w-[70%]">
           {!positionLoaded && !predicted ? (
             <CompassLoader />
-          ) : !predicted && destinationStation === null ? (
+          ) : !predicted ? (
             <MapContainer
               center={position}
               minZoom={2}
@@ -126,7 +120,7 @@ const Predictor = () => {
               />
               <MovingMarker position={position} setPosition={setPosition} />
             </MapContainer>
-          ) : predicted && destinationStation === null ? (
+          ) : (
             <MapContainer
               center={position}
               minZoom={2}
@@ -150,39 +144,23 @@ const Predictor = () => {
                   let yCoord = station.station.location.coordinates[0];
 
                   return (
-                    <Marker
-                      position={[xCoord, yCoord]}
-                      key={index}
-                      eventHandlers={{
-                        click: () => {
-                          setDestinationStation(station);
-                        },
-                      }}
-                    >
+                    <Marker position={[xCoord, yCoord]} key={index}>
                       <Popup>
                         <strong>
                           Estación nº {station.station.number}:{" "}
                           {station.station.address}
                         </strong>
                         <br /> <br />
-                        Predicción: {station.prediction.toFixed(2)} bicis
-                        disponibles
+                        Bicicletas disponibles: {station.available_bikes}
+                        <br /> <br />
+                        Capacidad de la estación: {station.total_capacity}
+                        <br /> <br />
+                        Estado: {station.is_open ? "Abierta" : "Cerrada"}
                       </Popup>
                     </Marker>
                   );
                 })}
             </MapContainer>
-          ) : (
-            <RoutedMap
-              originCoords={{
-                lat: position[0],
-                lng: position[1],
-              }}
-              destinationCoords={{
-                lat: destinationStation.station.location.coordinates[1],
-                lng: destinationStation.station.location.coordinates[0],
-              }}
-            />
           )}
         </div>
       </div>
@@ -190,4 +168,4 @@ const Predictor = () => {
   );
 };
 
-export default Predictor;
+export default StationFilterByLocation;

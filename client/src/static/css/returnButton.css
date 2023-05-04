@@ -1,0 +1,36 @@
+.return-button {
+    cursor: pointer;
+    font-weight: 700;
+    font-family: Helvetica,"sans-serif";
+    transition: all .2s;
+    padding: 10px 20px;
+    border-radius: 100px;
+    background: #f899c4;
+    border: 1px solid transparent;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    font-size: 15px;
+    border: solid 2px #7f013a;
+  }
+  
+  .return-button:hover {
+    background: #ff71b1;
+  }
+  
+  .return-button > svg {
+    width: 34px;
+    margin-right: 10px;
+    transition: transform .3s ease-in-out;
+    transform: rotate(180deg)
+  }
+  
+  .return-button:hover svg {
+    transform: translateX(-5px) rotate(180deg);
+  }
+  
+  .return-button:active {
+    transform: scale(0.95);
+  }
+  
+  

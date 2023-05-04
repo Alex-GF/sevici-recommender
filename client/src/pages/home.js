@@ -19,6 +19,7 @@ export default function Home() {
       </h2>
       <div className="mt-14 flex w-3/4 flex-col justify-evenly lg:flex-row">
         <button className="filterButton" onClick={() => navigator("/filter")}>Filtrar</button>
+        <button className="filterButton" onClick={() => navigator("/nearby")}>Filtrar cerca</button>
         <button className="filterButton" onClick={() => navigator("/predictor")}>Predecir</button>
         <button className="filterButton" onClick={() => navigator("/research")}>Investigar</button>
       </div>

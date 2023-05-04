@@ -3,14 +3,13 @@ import { predictStationsInputs } from "../forms/predictStationForm";
 import { useRef, useEffect, useState } from "react";
 import FormGenerator from "../components/formGenerator/formGenerator";
 import MeanGraph from "../components/graphs/MeanGraph";
-import {useNavigate} from "react-router-dom";
+import ReturnButton from "../components/returnButton";
 
 export default function Research() {
   let [filterValues, setFilterValues] = useState({});
   let [filtered, setFiltered] = useState(false);
 
   const predictFormRef = useRef(null);
-  const navigator = useNavigate();
 
   function handleSubmit({ values }) {
     setFilterValues(values);
@@ -32,9 +31,7 @@ export default function Research() {
 
   return (
     <div className="relative flex h-screen w-screen flex-col items-center justify-center bg-slate-200 bg-opacity-80 bg-[radial-gradient(#444cf7_0.5px,_transparent_0.5px),_radial-gradient(#444cf7_0.5px,_#e5e5f7_0.5px)] bg-[length:20px_20px]">
-      <button onClick={() => navigator("/")} className="font-bolder absolute left-10 top-10 cursor-pointer text-3xl underline underline-offset-2">
-        {"<- Volver"}
-      </button>
+      <ReturnButton/>
       <div className="flex h-[80%] w-[90%] flex-col-reverse items-center justify-between lg:w-[80%] lg:flex-row">
         <div className="mt-10 flex h-auto w-[80%] flex-col items-center justify-center rounded-md bg-white p-5 pt-12 lg:mt-0 lg:w-1/4">
           <h2 className="h-50% py-5 text-xl font-extrabold text-black underline underline-offset-4 lg:text-4xl">
