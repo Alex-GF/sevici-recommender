@@ -4,14 +4,13 @@ from rest_framework import routers
 from data_manager.endpoints import StationStatusViewSet
 from recommender.endpoints import bikes_predictors_regression, bikes_predictors_mean, station_predictors_nearby
 
-
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
 
 urlpatterns = [
-    path('api/', include(router.urls)),
-    path('api/stations/', StationStatusViewSet.as_view(), name='stations'),
-    path('api/station/', bikes_predictors_regression, name='station'),
+    path('api', include(router.urls)),
+    path('api/stations', StationStatusViewSet.as_view(), name='stations'),
+    path('api/station', bikes_predictors_regression, name='station'),
     path('api/predictors/mean', bikes_predictors_mean, name='predictor_mean'),
     path('api/predictors/nearby', station_predictors_nearby, name='predictor_nearby'),
     path('api/admin/', admin.site.urls),

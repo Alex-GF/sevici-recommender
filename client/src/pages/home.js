@@ -23,11 +23,11 @@ const Home = () => {
 
     setDataLoaded(false);
 
-    let query = "http://localhost:8000/api/stations/?";
+    let query = "http://localhost:8000/api/stations?";
 
     for (let key in values) {
       if (values[key]) {
-        if (key === "time"){
+        if (key === "hour"){
           query += `${key}=${values[key]}:00&`;
         } else {
           query += `${key}=${values[key]}&`;
@@ -82,6 +82,7 @@ const Home = () => {
               childrenPosition={-1}
               buttonText="Filtrar"
               buttonClassName="filterButton"
+              listenEnterKey
               scrollable
             />
           </div>

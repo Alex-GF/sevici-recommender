@@ -42,6 +42,7 @@ export default function Research() {
             childrenPosition={-1}
             buttonText="Predecir"
             buttonClassName="filterButton"
+            listenEnterKey
             scrollable
           />
         </div>

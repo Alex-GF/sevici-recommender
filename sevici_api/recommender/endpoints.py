@@ -10,28 +10,39 @@ from django.contrib.gis.db.models.functions import Distance as DistanceFunc
 from .serializers import StationPredictorLinearSerializer, StationPredictorMeanSerializer, StationPredictorNearbySerializer
 from django.utils import timezone
 from sklearn.linear_model import LinearRegression
-import itertools
+import itertools, pytz
 
 @api_view(['GET'])
 @permission_classes((permissions.AllowAny,))
 def bikes_predictors_regression(request):
     station_number = request.query_params.get('stationNumber', None)
-    date = request.query_params.get('date', None)
-    hour = request.query_params.get('hour', None)
+    if not station_number or not Station.objects.filter(number=station_number).exists():
+        return Response({"error": "You have to provide a valid stationNumber"}, status=status.HTTP_400_BAD_REQUEST)
     
-    if station_number is None:
-        return Response({"error": "You have to provide a stationNumber"}, status=status.HTTP_400_BAD_REQUEST)
-    
-    if hour is None:
-        return Response({"error": "You have to provide an hour"}, status=status.HTTP_400_BAD_REQUEST)
-    
-    if not date:
+    date_param = request.query_params.get('date', None)
+    if not date_param:
         return Response({"error": "You have to provide a date"}, status=status.HTTP_400_BAD_REQUEST)
-    else:
-        try:
-            parsed_date = timezone.datetime.strptime(date+" "+hour, "%Y-%m-%d %H:%M:%S")
-        except ValueError:
-            return Response({"error": "The date or hour format is incorrect"}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        parsed_date = timezone.datetime.strptime(date_param, "%Y-%m-%d")
+    except ValueError:
+        return Response({"error": "The date format is incorrect. It must be in format YYYY-MM-DD"}, status=status.HTTP_400_BAD_REQUEST)
+    
+    #hour param
+    hour_param = request.query_params.get('hour', None)
+    if not hour_param:
+        return Response({"error": "You have to provide an hour"}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        parsed_date = timezone.make_aware(timezone.datetime.strptime(date_param+" "+hour_param, "%Y-%m-%d %H:%M:%S"), timezone=pytz.utc)-timezone.timedelta(hours=2)
+    except ValueError:
+        return Response({"error": "The hour format is incorrect. It must be in format HH:MM:SS"}, status=status.HTTP_400_BAD_REQUEST)
+    
+    is_future = parsed_date-timezone.make_aware(timezone.datetime.now(), timezone=pytz.utc)
+
+    if is_future != abs(is_future):
+        return Response({"error": "You can't predict the past"}, status=status.HTTP_400_BAD_REQUEST)
+    
+    if is_future > timezone.timedelta(days=7):
+        return Response({"error": "You can't predict more than 7 days in the future"}, status=status.HTTP_400_BAD_REQUEST)
     
     station_status_progression = StationStatus.objects.filter(station__number=station_number, last_updated__lte=parsed_date, last_updated__gte=parsed_date-timezone.timedelta(days=30)).order_by('last_updated')
     function_points = [{"x": s.last_updated.timestamp(), "y": s.available_bikes} for s in station_status_progression]
@@ -65,11 +76,11 @@ def bikes_predictors_mean(request):
     if not hour_param:
         return Response({"error": "You have to provide an hour"}, status=status.HTTP_400_BAD_REQUEST)
     try:
-        date = timezone.datetime.strptime(date_param+" "+hour_param, "%Y-%m-%d %H:%M:%S")
+        date = timezone.make_aware(timezone.datetime.strptime(date_param+" "+hour_param, "%Y-%m-%d %H:%M:%S"), timezone=pytz.utc)-timezone.timedelta(hours=2)
     except ValueError:
         return Response({"error": "The hour format is incorrect. It must be in format HH:MM:SS"}, status=status.HTTP_400_BAD_REQUEST)
     
-    is_future = date-timezone.datetime.now()
+    is_future = date-timezone.make_aware(timezone.datetime.now(), timezone=pytz.utc)
 
     if is_future != abs(is_future):
         return Response({"error": "You can't predict the past"}, status=status.HTTP_400_BAD_REQUEST)
@@ -122,11 +133,11 @@ def station_predictors_nearby(request):
     if not hour_param:
         return Response({"error": "You have to provide an hour"}, status=status.HTTP_400_BAD_REQUEST)
     try:
-        date = timezone.datetime.strptime(date_param+" "+hour_param, "%Y-%m-%d %H:%M:%S")
+        date = timezone.make_aware(timezone.datetime.strptime(date_param+" "+hour_param, "%Y-%m-%d %H:%M:%S"), timezone=pytz.utc)-timezone.timedelta(hours=2)
     except ValueError:
         return Response({"error": "The hour format is incorrect. It must be in format HH:MM:SS"}, status=status.HTTP_400_BAD_REQUEST)
     
-    is_future = date-timezone.datetime.now()
+    is_future = date-timezone.make_aware(timezone.datetime.now(), timezone=pytz.utc)
 
     if is_future != abs(is_future):
         return Response({"error": "You can't predict the past"}, status=status.HTTP_400_BAD_REQUEST)
@@ -179,6 +190,8 @@ def station_predictors_nearby(request):
     response_data = _nearby_predictor(latitude, longitude, date, min_bikes, radius, method, limit)
     result = StationPredictorNearbySerializer(response_data, many=True).data
     return Response(result, status=status.HTTP_200_OK)
+
+# ------------------------------ PRIVATE METHODS ------------------------------ #
 
 def _mean_predictor(station, date, hour):
     max_date = date-timezone.timedelta(days=30)

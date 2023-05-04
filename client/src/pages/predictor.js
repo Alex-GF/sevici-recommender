@@ -46,6 +46,7 @@ const Predictor = () => {
             childrenPosition={-1}
             buttonText="Recomiéndame"
             buttonClassName="filterButton"
+            listenEnterKey
             scrollable
           />
         </div>
