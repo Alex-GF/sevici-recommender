@@ -24,7 +24,7 @@ const StationFilter = () => {
 
     setDataLoaded(false);
 
-    let query = "http://localhost:8000/api/stations?";
+    let query = "http://localhost:8000/api/stations/all?";
 
     for (let key in values) {
       if (values[key]) {
