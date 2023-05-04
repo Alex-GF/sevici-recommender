@@ -12,6 +12,7 @@ import { bestStationPredictorInputs } from "../forms/bestStationPredictorForm";
 import { useRef, useEffect, useState } from "react";
 import CompassLoader from "../components/compassLoader";
 import RoutedMap from "../components/maps/RoutedMap";
+import { useNavigate } from "react-router-dom";
 
 function MovingMarker({ position, setPosition }) {
   const markerRef = useRef(null);
@@ -29,6 +30,8 @@ const Predictor = () => {
   let [predictedStations, setPredictedStations] = useState([]);
   let [destinationStation, setDestinationStation] = useState(null);
   const bestStationFormRef = useRef(null);
+
+  const route = useNavigate();
 
   function handleSubmit({ values }) {
     if (!bestStationFormRef.current.validate()) return;
@@ -83,7 +86,10 @@ const Predictor = () => {
   useEffect(() => {}, [destinationStation]);
 
   return (
-    <div className="flex h-screen w-screen flex-col items-center justify-center bg-slate-200 bg-opacity-80 bg-[radial-gradient(#444cf7_0.5px,_transparent_0.5px),_radial-gradient(#444cf7_0.5px,_#e5e5f7_0.5px)] bg-[length:20px_20px]">
+    <div className="relative flex h-screen w-screen flex-col items-center justify-center bg-slate-200 bg-opacity-80 bg-[radial-gradient(#444cf7_0.5px,_transparent_0.5px),_radial-gradient(#444cf7_0.5px,_#e5e5f7_0.5px)] bg-[length:20px_20px]">
+      <button onClick={() => route("/")} className="font-bolder absolute left-10 top-10 cursor-pointer text-3xl underline underline-offset-2">
+        {"<- Volver"}
+      </button>
       <div className="flex h-[80%] w-[90%] flex-col-reverse items-center justify-between lg:w-[80%] lg:flex-row">
         <div className="mt-10 flex h-auto w-[80%] flex-col items-center justify-center rounded-md bg-white p-5 pt-12 lg:mt-0 lg:w-1/4">
           <h2 className="h-50% py-5 text-xl font-extrabold text-black underline underline-offset-4 lg:text-4xl">
@@ -96,6 +102,7 @@ const Predictor = () => {
             childrenPosition={-1}
             buttonText="Recomiéndame"
             buttonClassName="filterButton"
+            listenEnterKey
             scrollable
           />
         </div>

@@ -11,7 +11,7 @@ export default function RegressionGraph({date, hour, stationNumber, width, heigh
 
   function handleSubmit({ values }) {
 
-    let query = "http://localhost:8000/api/station/?";
+    let query = "http://localhost:8000/api/station?";
 
     for (let key in values) {
       if (values[key]) {

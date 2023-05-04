@@ -3,8 +3,16 @@ import moment from 'moment';
 
 export const filterStationsInputs = [
     {
+      tag: 'Número de estación',
+      name: 'stationNumber',
+      type: 'number',
+      defaultValue: "",
+      isRequired: false,
+      validators: [filterStationsValidators.positiveNumber]
+    },
+    {
       tag: 'Bicis disponibles',
-      name: 'available-bikes',
+      name: 'availableBikes',
       type: 'number',
       defaultValue: "",
       isRequired: false,
@@ -12,7 +20,7 @@ export const filterStationsInputs = [
     },
     {
       tag: 'Capacidad de la estación',
-      name: 'station-capacity',
+      name: 'stationCapacity',
       type: 'number',
       defaultValue: "",
       isRequired: false,
@@ -20,7 +28,7 @@ export const filterStationsInputs = [
     },
     {
       tag: 'Estado',
-      name: 'station-status',
+      name: 'stationStatus',
       type: 'select',
       values: ["Cualquiera", "Abierta", "Cerrada"],
       defaultValue: "Cualquiera",
@@ -37,7 +45,7 @@ export const filterStationsInputs = [
     },
     {
       tag: "Hora",
-      name: "time",
+      name: "hour",
       type: "time",
       defaultValue: "12:00",
       isRequired: false,

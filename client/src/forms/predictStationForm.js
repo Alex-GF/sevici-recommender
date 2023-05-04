@@ -16,7 +16,7 @@ export const predictStationsInputs = [
       type: "date",
       defaultValue: moment().format('YYYY-MM-DD'),
       isRequired: true,
-      validators: []
+      validators: [filterStationsValidators.notPastDate, filterStationsValidators.notMoreThanOneWeek]
     },
     {
       tag: "Hora",

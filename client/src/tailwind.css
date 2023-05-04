@@ -611,8 +611,44 @@ video {
   }
 }
 
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+.left-10 {
+  left: 2.5rem;
+}
+
+.top-10 {
+  top: 2.5rem;
+}
+
 .mt-10 {
   margin-top: 2.5rem;
+}
+
+.mb-5 {
+  margin-bottom: 1.25rem;
+}
+
+.mb-10 {
+  margin-bottom: 2.5rem;
+}
+
+.mt-14 {
+  margin-top: 3.5rem;
+}
+
+.mb-7 {
+  margin-bottom: 1.75rem;
+}
+
+.mb-3 {
+  margin-bottom: 0.75rem;
 }
 
 .flex {
@@ -647,6 +683,10 @@ video {
   height: 100vh;
 }
 
+.h-\[300px\] {
+  height: 300px;
+}
+
 .max-h-\[1000px\] {
   max-height: 1000px;
 }
@@ -667,6 +707,14 @@ video {
   width: 100vw;
 }
 
+.w-\[300px\] {
+  width: 300px;
+}
+
+.w-3\/4 {
+  width: 75%;
+}
+
 .max-w-xl {
   max-width: 36rem;
 }
@@ -676,8 +724,8 @@ video {
           transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
-.flex-row {
-  flex-direction: row;
+.cursor-pointer {
+  cursor: pointer;
 }
 
 .flex-col {
@@ -794,12 +842,26 @@ video {
   line-height: 1.75rem;
 }
 
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+}
+
 .font-bold {
   font-weight: 700;
 }
 
 .font-extrabold {
   font-weight: 800;
+}
+
+.font-thin {
+  font-weight: 100;
 }
 
 .text-black {
@@ -812,6 +874,11 @@ video {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
+.text-slate-900 {
+  --tw-text-opacity: 1;
+  color: rgb(15 23 42 / var(--tw-text-opacity));
+}
+
 .underline {
   text-decoration-line: underline;
 }
@@ -822,6 +889,11 @@ video {
 
 .underline-offset-4 {
   text-underline-offset: 4px;
+}
+
+.filter {
+  -webkit-filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+          filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 
 .transition {
