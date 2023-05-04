@@ -8,14 +8,14 @@ const createRoutineMachineLayer = (props) => {
 
   const originIcon = L.icon({
     iconUrl:
-      '/marker-icon-2x-red.png',
-      iconSize: [35, 40],
+      '/location-red.png',
+      iconSize: [30, 30],
   });
 
   const destinationIcon = L.icon({
     iconUrl:
-      '/marker-icon-2x.png',
-    iconSize: [30, 50],
+      '/location-blue.png',
+    iconSize: [30, 30],
   });
 
   const instance = L.Routing.control({

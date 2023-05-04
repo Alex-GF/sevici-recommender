@@ -13,6 +13,7 @@ import { useRef, useEffect, useState } from "react";
 import CompassLoader from "../components/compassLoader";
 import RoutedMap from "../components/maps/RoutedMap";
 import { useNavigate } from "react-router-dom";
+import L from "leaflet";
 
 function MovingMarker({ position, setPosition }) {
   const markerRef = useRef(null);
@@ -22,6 +23,11 @@ function MovingMarker({ position, setPosition }) {
 
   return <Marker position={position} ref={markerRef}></Marker>;
 }
+
+const originIcon = L.icon({
+  iconUrl: "/location-red.png",
+  iconSize: [30, 30],
+});
 
 const Predictor = () => {
   let [position, setPosition] = useState([37.38283, -5.97317]);
@@ -38,7 +44,7 @@ const Predictor = () => {
 
     setPositionLoaded(false);
     setPredicted(false);
-    setDestinationStation(null)
+    setDestinationStation(null);
 
     values["latitude"] = position[0];
     values["longitude"] = position[1];
@@ -87,7 +93,10 @@ const Predictor = () => {
 
   return (
     <div className="relative flex h-screen w-screen flex-col items-center justify-center bg-slate-200 bg-opacity-80 bg-[radial-gradient(#444cf7_0.5px,_transparent_0.5px),_radial-gradient(#444cf7_0.5px,_#e5e5f7_0.5px)] bg-[length:20px_20px]">
-      <button onClick={() => route("/")} className="font-bolder absolute left-10 top-10 cursor-pointer text-3xl underline underline-offset-2">
+      <button
+        onClick={() => route("/")}
+        className="font-bolder absolute left-10 top-10 cursor-pointer text-3xl underline underline-offset-2"
+      >
         {"<- Volver"}
       </button>
       <div className="flex h-[80%] w-[90%] flex-col-reverse items-center justify-between lg:w-[80%] lg:flex-row">
@@ -137,24 +146,26 @@ const Predictor = () => {
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
-              <Marker position={position}>
-                      <Popup>
-                        <strong>
-                          Tu ubicación
-                        </strong>
-                      </Popup>
-                    </Marker>
+              <Marker position={position} icon={originIcon}>
+                <Popup>
+                  <strong>Tu ubicación</strong>
+                </Popup>
+              </Marker>
               {predictedStations &&
                 predictedStations.map((station, index) => {
                   let xCoord = station.station.location.coordinates[1];
                   let yCoord = station.station.location.coordinates[0];
 
                   return (
-                    <Marker position={[xCoord, yCoord]} key={index} eventHandlers={{
-                      click: () => {
-                        setDestinationStation(station);
-                      }
-                    }}>
+                    <Marker
+                      position={[xCoord, yCoord]}
+                      key={index}
+                      eventHandlers={{
+                        click: () => {
+                          setDestinationStation(station);
+                        },
+                      }}
+                    >
                       <Popup>
                         <strong>
                           Estación nº {station.station.number}:{" "}
