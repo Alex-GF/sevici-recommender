@@ -1,8 +1,14 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Home() {
 
   const navigator = useNavigate()
+
+  useEffect(()=>{
+    document.title = "Bicicator - Inicio"
+    document.querySelector('meta[name="description"]').setAttribute("content", "¡Optimiza tus búsquedas de estaciones de SEVICI! Ponemos a tu disposición herramientas para predecir y filtrar el estado de las estaciones.");
+  }, [])
 
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center bg-slate-200 bg-opacity-80 bg-[radial-gradient(#444cf7_0.5px,_transparent_0.5px),_radial-gradient(#444cf7_0.5px,_#e5e5f7_0.5px)] bg-[length:20px_20px]">

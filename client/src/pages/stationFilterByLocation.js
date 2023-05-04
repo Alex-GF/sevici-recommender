@@ -82,6 +82,8 @@ const StationFilterByLocation = () => {
         setPositionLoaded(true);
       }
     );
+    document.title = "Bicicator - Filtrar Ubicación"
+    document.querySelector('meta[name="description"]').setAttribute("content", "Servicio de filtrado por ubicación de bicicator. Selecciona una ubicación y conoce el estado de las estaciones de SEVICI más cercanas en el pasado.");
   }, []);
 
   return (

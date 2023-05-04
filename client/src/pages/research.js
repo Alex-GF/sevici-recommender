@@ -19,6 +19,9 @@ export default function Research() {
   useEffect(() => {
     document.getElementsByClassName("class-form")[0].style.justifyContent =
       "start";
+    
+    document.title = "Bicicator - Investigación"
+    document.querySelector('meta[name="description"]').setAttribute("content", "Servicio de investigación de bicicator. Aquí puedes comparar cómo rinden los distintos modelos de predicción en las estaciones de SEVICI.");
   }, [filtered]);
 
   useEffect(() => {

@@ -86,6 +86,10 @@ const Predictor = () => {
         setPositionLoaded(true);
       }
     );
+    
+    document.title = "Bicicator - Predictor"
+    document.querySelector('meta[name="description"]').setAttribute("content", "Con el predictor de bicicator puedes encontrar la estación de SEVICI más cercana a tu ubicación que contará con bicis disponibles a la hora que especifiques.");
+    
   }, []);
 
   useEffect(() => {}, [destinationStation]);

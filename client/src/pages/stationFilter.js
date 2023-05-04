@@ -62,6 +62,11 @@ const StationFilter = () => {
     }
   }, [dataLoaded]);
 
+  useEffect(()=>{
+    document.title = "Bicicator - Filtrar"
+    document.querySelector('meta[name="description"]').setAttribute("content", "Servicio de filtrado de bicicator. Conoce el estado de las estaciones de SEVICI en el pasado.");
+  },[])
+
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center bg-slate-200 bg-opacity-80 bg-[radial-gradient(#444cf7_0.5px,_transparent_0.5px),_radial-gradient(#444cf7_0.5px,_#e5e5f7_0.5px)] bg-[length:20px_20px]">
       <ReturnButton/>
