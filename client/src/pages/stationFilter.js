@@ -7,6 +7,7 @@ import { useRef, useEffect, useState } from "react";
 import CompassLoader from "../components/compassLoader";
 import useQuery from "../hooks/useQuery";
 import ReturnButton from "../components/returnButton";
+import { API_SERVER } from "../settings";
 
 const StationFilter = () => {
   const query = useQuery();
@@ -22,7 +23,7 @@ const StationFilter = () => {
 
     setDataLoaded(false);
 
-    let query = "http://localhost:8000/api/stations/all?";
+    let query = `${API_SERVER}stations/all?`;
 
     for (let key in values) {
       if (values[key]) {

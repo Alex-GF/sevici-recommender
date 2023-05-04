@@ -13,6 +13,7 @@ import { useRef, useEffect, useState } from "react";
 import CompassLoader from "../components/compassLoader";
 import ReturnButton from "../components/returnButton";
 import L from "leaflet";
+import { API_SERVER } from "../settings";
 
 function MovingMarker({ position, setPosition }) {
   const markerRef = useRef(null);
@@ -44,7 +45,7 @@ const StationFilterByLocation = () => {
     values["latitude"] = position[0];
     values["longitude"] = position[1];
 
-    let query = "http://localhost:8000/api/stations/nearby?";
+    let query = `${API_SERVER}stations/nearby?`;
 
     for (let key in values) {
       if (values[key]) {

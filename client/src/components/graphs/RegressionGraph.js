@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Plot from "react-plotly.js";
 import CompassLoader from "../compassLoader";
+import { API_SERVER } from "../../settings";
 
 export default function RegressionGraph({date, hour, stationNumber, width, height}) {
   let [points, setPoints] = useState([]);
@@ -11,7 +12,7 @@ export default function RegressionGraph({date, hour, stationNumber, width, heigh
 
   function handleSubmit({ values }) {
 
-    let query = "http://localhost:8000/api/predictors/linear?";
+    let query = `${API_SERVER}predictors/linear?`;
 
     for (let key in values) {
       if (values[key]) {

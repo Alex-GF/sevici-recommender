@@ -14,6 +14,7 @@ import CompassLoader from "../components/compassLoader";
 import RoutedMap from "../components/maps/RoutedMap";
 import ReturnButton from "../components/returnButton";
 import L from "leaflet";
+import { API_SERVER } from "../settings";
 
 function MovingMarker({ position, setPosition }) {
   const markerRef = useRef(null);
@@ -49,7 +50,7 @@ const Predictor = () => {
 
     values["method"] = values["method"] === "Media" ? "mean" : "linear";
 
-    let query = "http://localhost:8000/api/predictors/nearby?";
+    let query = `${API_SERVER}predictors/nearby?`;
 
     for (let key in values) {
       if (values[key]) {

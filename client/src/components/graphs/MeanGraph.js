@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Plot from "react-plotly.js";
 import CompassLoader from "../compassLoader";
+import { API_SERVER } from "../../settings";
 
 export default function MeanGraph({
   date,
@@ -17,7 +18,7 @@ export default function MeanGraph({
   function handleSubmit({ values }) {
     setDataLoaded(false);
 
-    let query = "http://localhost:8000/api/predictors/mean?";
+    let query = `${API_SERVER}predictors/mean?`;
 
     for (let key in values) {
       if (values[key]) {
