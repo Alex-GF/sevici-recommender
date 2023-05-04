@@ -18,14 +18,20 @@ const Home = () => {
   const filterFormRef = useRef(null);
 
   function handleSubmit({ values }) {
-    setDataLoaded(false);
+
     if (dataLoaded && !filterFormRef.current.validate()) return;
+
+    setDataLoaded(false);
 
     let query = "http://localhost:8000/api/stations/?";
 
     for (let key in values) {
       if (values[key]) {
-        query += `${key}=${values[key]}&`;
+        if (key === "time"){
+          query += `${key}=${values[key]}:00&`;
+        } else {
+          query += `${key}=${values[key]}&`;
+        }
       }
     }
 

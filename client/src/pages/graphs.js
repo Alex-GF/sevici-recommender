@@ -45,7 +45,7 @@ export default function Graphs() {
               data.linear_function.intercept,
           });
         }
-        console.log(data.linear_function.coef, data.linear_function.intercept);
+        
         for (let i = 1; i <= 7; i++) {
           let xPoint =
             sortedListOfPoints[sortedListOfPoints.length - 1].x + i * 86400;

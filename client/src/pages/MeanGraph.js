@@ -44,15 +44,11 @@ export default function MeanGraph({
 
         let originTimestamp = sortedListOfPoints[0].x;
 
-        console.log({
-          x: data.prediction[0],
-          y: data.prediction[1],
-        });
-
         setPredictionPoint({
           x: data.prediction[0],
           y: data.prediction[1],
         });
+
         // setFilterValues(values);
         setDataLoaded(true);
       })
@@ -74,7 +70,7 @@ export default function MeanGraph({
 
   useEffect(() => {
     setDataLoaded(false);
-  }, [stationNumber]);
+  }, [stationNumber, date, hour]);
 
   return (
     <>
@@ -84,18 +80,20 @@ export default function MeanGraph({
         <Plot
           data={[
             {
-              x: points.map((point) => new Date(point.x)),
+              x: points.map((point) => new Date(parseInt(point.x)*1000)),
               y: points.map((point) => point.y),
               type: "scatter",
               mode: "lines+markers",
               marker: { color: "blue" },
+              name: "Datos previos estación",
             },
             {
-              x: [new Date(predictionPoint.x)],
+              x: [new Date(parseInt(predictionPoint.x)*1000)],
               y: [predictionPoint.y],
               type: "scatter",
               mode: "lines+markers",
-              marker: { color: "red" },
+              marker: { color: "green" },
+              name: "Predicción",
             },
           ]}
           layout={{

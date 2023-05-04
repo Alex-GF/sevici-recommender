@@ -10,7 +10,7 @@ class PointSerializer(serializers.Serializer):
    y = serializers.FloatField()
    
 class StationPredictorLinearSerializer(serializers.Serializer):
-   bikes_predicted = serializers.IntegerField()
+   prediction = PointSerializer()
    evolution = serializers.ListField(child=PointSerializer())
    linear_function = LinearFunctionSerializer()
    station = StationSerializer()

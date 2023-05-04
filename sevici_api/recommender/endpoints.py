@@ -18,7 +18,6 @@ def bikes_predictors_regression(request):
     station_number = request.query_params.get('stationNumber', None)
     date = request.query_params.get('date', None)
     hour = request.query_params.get('hour', None)
-    location = request.query_params.get('location', None)
     
     if station_number is None:
         return Response({"error": "You have to provide a stationNumber"}, status=status.HTTP_400_BAD_REQUEST)
@@ -39,7 +38,7 @@ def bikes_predictors_regression(request):
     
     bikes_predicted, regression_function_parameters = _linear_regresion_predictor(parsed_date, station_status_progression)
     
-    yourdata= {"bikes_predicted": bikes_predicted, "evolution": function_points, "linear_function": regression_function_parameters,"station": station_status_progression[0].station}
+    yourdata= {"prediction": {"x": parsed_date.timestamp(), "y": float(bikes_predicted)}, "evolution": function_points, "linear_function": regression_function_parameters,"station": station_status_progression[0].station}
     results = StationPredictorLinearSerializer(yourdata).data
     return Response(results, status=status.HTTP_200_OK)
 
@@ -79,8 +78,11 @@ def bikes_predictors_mean(request):
         return Response({"error": "You can't predict more than 7 days in the future"}, status=status.HTTP_400_BAD_REQUEST)
     
     mean_prediction = _mean_predictor(station, date.date(), date.time())
+    
+    station_status_progression = StationStatus.objects.filter(station__number=station_number_param, last_updated__lte=date, last_updated__gte=date-timezone.timedelta(days=30)).order_by('last_updated')
+    function_points = [{"x": s.last_updated.timestamp(), "y": s.available_bikes} for s in station_status_progression]
 
-    response_data = {"prediction": [date.timestamp(), mean_prediction[0]], "evolution": mean_prediction[1], "station": station}
+    response_data = {"prediction": [date.timestamp(), mean_prediction], "evolution": function_points, "station": station}
     
     result = StationPredictorMeanSerializer(response_data).data
     return Response(result, status=status.HTTP_200_OK)
@@ -217,14 +219,8 @@ def _linear_regresion_predictor(parsed_date, station_status_progression):
     
     linear_regressor.fit([[x[1]] for x in function_points], [x[0] for x in function_points])
     
-    print(linear_regressor.coef_[0])
-    print(linear_regressor.intercept_)
-    
     linear_regresion_ecuation_coef = linear_regressor.coef_[0]
     linear_regresion_ecuation_intercept = linear_regressor.intercept_
-    
-    print(linear_regresion_ecuation_coef)
-    print(linear_regresion_ecuation_intercept)
     
     return (int(linear_regresion_ecuation_coef*(parsed_date.timestamp()-origin_timestamp)+linear_regresion_ecuation_intercept), {
         "coef": linear_regresion_ecuation_coef,

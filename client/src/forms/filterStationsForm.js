@@ -1,4 +1,5 @@
 import { filterStationsValidators } from '../libs/validators/filterStationsValidators';
+import moment from 'moment';
 
 export const filterStationsInputs = [
     {
@@ -30,7 +31,7 @@ export const filterStationsInputs = [
       tag: "Fecha",
       name: "date",
       type: "date",
-      defaultValue: "",
+      defaultValue: moment().format('YYYY-MM-DD'),
       isRequired: false,
       validators: [filterStationsValidators.notFutureDate]
     },
@@ -38,7 +39,7 @@ export const filterStationsInputs = [
       tag: "Hora",
       name: "time",
       type: "time",
-      defaultValue: "",
+      defaultValue: "12:00",
       isRequired: false,
       validators: []
     }

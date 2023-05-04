@@ -8,7 +8,6 @@ import { useRef, useEffect, useState } from "react";
 function MovingMarker({position, setPosition}) {
     const markerRef = useRef(null)
     const map = useMapEvent('click', (e) => {
-    console.log("click")
       setPosition(e.latlng)
     })
     
@@ -27,7 +26,6 @@ const Predictor = () => {
 
   function handleSubmit({ values }) {
     if (!filterFormRef.current.validate()) return;
-    console.log(values);
   }
 
   useEffect(() => {

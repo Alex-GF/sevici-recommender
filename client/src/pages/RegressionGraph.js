@@ -7,6 +7,7 @@ export default function RegressionGraph({date, hour, stationNumber, width, heigh
   let [linearFunctionPoints, setLinearFunctionPoints] = useState([]);
   let [dataLoaded, setDataLoaded] = useState(false);
   let [yLimits, setYLimits] = useState([0, 50]);
+  let [prediction, setPrediction] = useState({});
 
   function handleSubmit({ values }) {
 
@@ -33,8 +34,11 @@ export default function RegressionGraph({date, hour, stationNumber, width, heigh
         let minY = Math.min(...sortedListOfPoints.map((point) => point.y)) - 5;
 
         setYLimits([minY, maxY]);
-
         setPoints(sortedListOfPoints);
+        setPrediction({
+          x: parseInt(data.prediction.x)*1000,
+          y: data.prediction.y <= 0 ? 0 : data.prediction.y,
+        });
 
         let linearPoints = [];
 
@@ -81,7 +85,7 @@ export default function RegressionGraph({date, hour, stationNumber, width, heigh
 
   useEffect(() => {
     setDataLoaded(false);
-  }, [stationNumber]);
+  }, [stationNumber, date, hour]);
 
   return (
     <>
@@ -91,18 +95,28 @@ export default function RegressionGraph({date, hour, stationNumber, width, heigh
         <Plot
           data={[
             {
-              x: points.map((point) => new Date(point.x)),
+              x: points.map((point) => new Date(parseInt(point.x)*1000)),
               y: points.map((point) => point.y),
               type: "scatter",
               mode: "lines+markers",
               marker: { color: "blue" },
+              name: "Datos previos estación",
             },
             {
-              x: linearFunctionPoints.map((point) => new Date(point.x)),
+              x: linearFunctionPoints.map((point) => new Date(parseInt(point.x)*1000)),
               y: linearFunctionPoints.map((point) => point.y),
               type: "scatter",
               mode: "lines+markers",
               marker: { color: "red" },
+              name: "Tendencia predicciones",
+            },
+            {
+              x: [new Date(prediction.x)],
+              y: [prediction.y],
+              type: "scatter",
+              mode: "lines+markers",
+              marker: { color: "green" },
+              name: "Predicción",
             },
           ]}
           layout={{
