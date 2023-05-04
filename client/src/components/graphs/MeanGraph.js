@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Plot from "react-plotly.js";
-import CompassLoader from "../components/compassLoader";
+import CompassLoader from "../compassLoader";
 
 export default function MeanGraph({
   date,

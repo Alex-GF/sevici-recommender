@@ -1,11 +1,10 @@
-import RegressionGraph from "./RegressionGraph";
+import RegressionGraph from "../components/graphs/RegressionGraph";
 import { predictStationsInputs } from "../forms/predictStationForm";
 import { useRef, useEffect, useState } from "react";
 import FormGenerator from "../components/formGenerator/formGenerator";
-import MeanGraph from "./MeanGraph";
+import MeanGraph from "../components/graphs/MeanGraph";
 
 export default function Research() {
-  let [stations, setStations] = useState([]);
   let [filterValues, setFilterValues] = useState({});
   let [filtered, setFiltered] = useState(false);
 
