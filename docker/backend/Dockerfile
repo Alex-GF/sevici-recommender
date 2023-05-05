@@ -8,7 +8,6 @@ RUN apk update
 RUN apk add --no-cache git postgresql-dev libc-dev gcc nano bash
 RUN apk add --no-cache g++ make libffi-dev python3-dev build-base
 RUN apk add py3-pip py3-pillow py3-cffi py3-brotli musl-dev pango
-RUN apk add qt5-qtbase-dev
 RUN apk add --no-cache geos gdal
 
 
