@@ -27,6 +27,16 @@ Existe una demo de la aplicación disponible en la siguiente dirección: [https:
 - pip: 23.1.2
 - PostGIS: 3.1.4
 
+### Enlaces de interés
+
+- [NodeJS](https://nodejs.org/es/)
+- [npm](https://www.npmjs.com/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Python](https://www.python.org/)
+- [pip](https://pypi.org/project/pip/)
+- [GeoDjango y PostGIS](https://docs.djangoproject.com/en/4.2/ref/contrib/gis/tutorial/#setting-up)
+- [JCDecaux](https://developer.jcdecaux.com)
+
 ### Pasos previos
 
 1. Clonar el repositorio
