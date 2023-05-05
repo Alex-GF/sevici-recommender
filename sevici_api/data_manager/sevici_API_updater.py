@@ -9,7 +9,7 @@ URL = "https://api.jcdecaux.com/vls/v3/stations"
 
 def start():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(fetch_data, 'interval', minutes=1)
+    scheduler.add_job(fetch_data, 'interval', minutes=10)
     scheduler.start()
 
 def fetch_data():
