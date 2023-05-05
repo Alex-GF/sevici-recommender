@@ -15,4 +15,3 @@ RUN yarn global add serve
 
 ARG API_SERVER
 ENV REACT_APP_API_SERVER=${API_SERVER}
-RUN yarn build
