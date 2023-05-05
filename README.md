@@ -6,20 +6,19 @@ Bicicator es un proyecto que busca recopilar datos en tiempo real sobre las esta
 
 También ofrece servicios para filtrar las estaciones de la compañía en función de su estado en un momento determinado, tanto de manera general como en un radio de distancia desde una dirección.
 
-## Demo
+### Índice
+
+1. [Demo](#demo)
+2. [Máquina](#local)
+3. [Contenedor Docker](#docker)
+
+## Demo<a name="demo"></a>
 
 Existe una demo de la aplicación disponible en la siguiente dirección: [https://bicicator.javiercavlop.com/](https://bicicator.javiercavlop.com/)
 
-## Instalación local
+## Máquina<a name="local"></a>
 
-### Índice
-
-1. [Máquina](#local)
-2. [Contenedor Docker](#docker)
-
-### Máquina<a name="local"></a>
-
-#### Requisitos
+### Requisitos
 
 - NodeJS: 20.0.0
 - npm: 9.6.4
@@ -28,16 +27,15 @@ Existe una demo de la aplicación disponible en la siguiente dirección: [https:
 - pip: 23.1.2
 - PostGIS: 3.1.4
 
-#### Pasos previos
+### Pasos previos
 
 1. Clonar el repositorio
 
 ```
 git clone https://github.com/Alex-GF/sevici-recommender.git
-
 ```
 
-#### Backend
+### Backend
 
 1. Crear una base de datos en PostgreSQL y un usuario con todos los permisos sobre ella. (De ahora en adelante, nos referiremos a esta BD con el nombre: `sevici_db`):
 
@@ -96,7 +94,7 @@ python manage.py migrate
 python manage.py runserver --noreload
 ```
 
-#### Frontend
+### Frontend
 
 Una vez lanzado el backend, dejamos corriendo la tarea y, desde otra terminal, accedemos a la carpeta `frontend` del proyecto. A continuación:
 
@@ -118,18 +116,18 @@ yarn install
 yarn start
 ```
 
-#### Anotaciones finales
+### Anotaciones finales
 
 Una vez lanzados los dos servidores, podemos acceder a la aplicación desde el navegador en la dirección `http://localhost:3000/`. Cabe destacar que no se podrán ver datos de las estaciones ni usar las funcionalidades hasta 10 minutos después del lanzamiento del backend, ya que es el tiempo que tarda en lanzarse la primera tarea periódica de recopiación de datos.
 
-### Contenedor Docker<a name="docker"></a>
+## Contenedor Docker<a name="docker"></a>
 
-#### Requisitos
+### Requisitos
 
 - Docker: 20.10.20
 - Docker-compose: 2.12.1
 
-#### Pasos
+### Pasos
 
 1. Clonar el repositorio
 
@@ -156,6 +154,6 @@ docker-compose up
 
 NOTA: si se desea lanzar los contenedores en segundo plano, especificar el flag `-d` al final del comando anterior.
 
-#### Anotaciones finales
+### Anotaciones finales
 
 Una vez lanzados los dos servidores, podemos acceder a la aplicación desde el navegador en la dirección `http://localhost/`. Cabe destacar que no se podrán ver datos de las estaciones ni usar las funcionalidades hasta 10 minutos después del lanzamiento del backend, ya que es el tiempo que tarda en lanzarse la primera tarea periódica de recopiación de datos.
