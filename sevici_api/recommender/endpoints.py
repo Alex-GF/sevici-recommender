@@ -9,8 +9,8 @@ from django.contrib.gis.measure import Distance
 from django.contrib.gis.db.models.functions import Distance as DistanceFunc
 from .serializers import StationPredictorLinearSerializer, StationPredictorMeanSerializer, StationPredictorNearbySerializer
 from django.utils import timezone
-from sklearn.linear_model import LinearRegression
 import itertools, pytz
+from .utils.LinearRegression import LinearRegression
 
 @api_view(['GET'])
 @permission_classes((permissions.AllowAny,))
@@ -228,12 +228,12 @@ def _linear_regresion_predictor(parsed_date, station_status_progression):
     
     function_points = [(s.available_bikes, s.last_updated.timestamp()-origin_timestamp) for s in station_status_progression]
     
-    linear_regressor = LinearRegression()
+    linear_regressor = LinearRegression(x_points=[x[1] for x in function_points], y_points=[x[0] for x in function_points])
     
-    linear_regressor.fit([[x[1]] for x in function_points], [x[0] for x in function_points])
+    linear_regressor.fit()
     
-    linear_regresion_ecuation_coef = linear_regressor.coef_[0]
-    linear_regresion_ecuation_intercept = linear_regressor.intercept_
+    linear_regresion_ecuation_coef = linear_regressor.coef
+    linear_regresion_ecuation_intercept = linear_regressor.intercept
     
     return (int(linear_regresion_ecuation_coef*(parsed_date.timestamp()-origin_timestamp)+linear_regresion_ecuation_intercept), {
         "coef": linear_regresion_ecuation_coef,
