@@ -63,6 +63,7 @@ services:
         API_SERVER: ${API_SERVER_URL}
     environment:
       NODE_ENV: ${NODE_ENV}
+      REACT_APP_API_SERVER: ${API_SERVER_URL}
     command: sh -c "serve -s build -l 3000 --no-clipboard"
     depends_on:
       - backend
