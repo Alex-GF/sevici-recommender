@@ -145,16 +145,15 @@ def station_predictors_nearby(request):
     if is_future > timezone.timedelta(days=7):
         return Response({"error": "You can't predict more than 7 days in the future"}, status=status.HTTP_400_BAD_REQUEST)
     
-    #minBikes param
-    min_bikes_param = request.query_params.get('minBikes', None)
-    if not min_bikes_param:
-        return Response({"error": "You have to provide a minBikes"}, status=status.HTTP_400_BAD_REQUEST)
-    try:
-        min_bikes = int(min_bikes_param)
-    except ValueError:
-        return Response({"error": "The minBikes format is incorrect"}, status=status.HTTP_400_BAD_REQUEST)
-    if min_bikes < 0:
-        return Response({"error": "The minBikes must be positive"}, status=status.HTTP_400_BAD_REQUEST)
+    #availableBikes param (optional)
+    min_bikes_param = request.query_params.get('availableBikes', None)
+    if min_bikes_param:
+        try:
+            min_bikes = int(min_bikes_param)
+        except ValueError:
+            return Response({"error": "The availableBikes format is incorrect"}, status=status.HTTP_400_BAD_REQUEST)
+        if min_bikes < 0:
+            return Response({"error": "The availableBikes must be positive"}, status=status.HTTP_400_BAD_REQUEST)
     
     #radius param
     radius_param = request.query_params.get('radius', None)
@@ -247,13 +246,19 @@ def _nearby_predictor(latitude, longitude, full_date, min_bikes, radius, method,
     if method == "mean":
         for station in stations:
             prediction = _mean_predictor(station, full_date.date(), full_date.time())
-            if prediction >= min_bikes:
+            if min_bikes:
+                if prediction >= min_bikes:
+                    result.append({"prediction": prediction, "station": station}) 
+            else:
                 result.append({"prediction": prediction, "station": station}) 
     else:
         for station in stations:
             station_status_progression = StationStatus.objects.filter(station=station, last_updated__lte=full_date, last_updated__gte=full_date-timezone.timedelta(days=30)).order_by('last_updated')
             prediction, _ =_linear_regresion_predictor(full_date, station_status_progression)
-            if prediction >= min_bikes:
+            if min_bikes:
+                if prediction >= min_bikes:
+                    result.append({"prediction": prediction, "station": station})
+            else:
                 result.append({"prediction": prediction, "station": station})
     
     if limit:

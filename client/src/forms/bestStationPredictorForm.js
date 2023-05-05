@@ -4,7 +4,7 @@ import moment from 'moment';
 export const bestStationPredictorInputs = [
     {
       tag: 'Mínimo de bicis disponibles',
-      name: 'minBikes',
+      name: 'availableBikes',
       type: 'number',
       defaultValue: "",
       isRequired: true,

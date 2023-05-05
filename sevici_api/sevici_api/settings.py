@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework_gis',
+    'swagger_render',
 ]
 
 MIDDLEWARE = [
@@ -154,3 +155,7 @@ CONTRACT = os.environ.get('CONTRACT', '')
 if os.environ.get('DJANGO_ENV', '') == "production":
     GDAL_LIBRARY_PATH=glob('/usr/lib/libgdal.so.*')[0]
     GEOS_LIBRARY_PATH=glob('/usr/lib/libgeos_c.so.*')[0]
+    
+# SWAGGER DOCUMENTATION CONFIGURATION
+
+SWAGGER_YAML_FILENAME = os.environ.get('SWAGGER_URL', 'http://localhost:8000/') + 'docs/index.yml'

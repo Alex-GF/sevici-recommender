@@ -16,7 +16,7 @@ WORKDIR /usr/src/app/sevici-api
 COPY ./sevici_api .
 
 RUN pip install -U pip
-RUN pip install -r requirements.txt
+RUN pip install -r docker-requirements.txt
 RUN pip install gunicorn
 RUN pip install ipdb
 RUN pip install ipython

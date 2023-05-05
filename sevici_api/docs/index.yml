@@ -1,0 +1,521 @@
+openapi: 3.0.0
+servers: []
+info:
+  description: This API lets you to monitorize the status of SEVICI's stations in Seville and plan where to find bikes using the predictions module
+  version: "1.0.0"
+  title: Bicicator API
+  contact:
+    email: bicicator@gmail.com
+  license:
+    name: MIT - License
+    url: 'https://github.com/Alex-GF/sevici-recommender/blob/main/LICENSE'
+tags:
+  - name: filters
+    description: Operations that consists mainly in filters
+  - name: predictions
+    description: Operations that uses different techniques to predict data
+paths:
+  /api/stations/all:
+    get:
+      tags:
+        - filters
+      summary: shows all the stations
+      operationId: stationsAll
+      description: |
+        By passing in the appropriate options, you can search for
+        all the stations stored in the system
+      parameters:
+        - in: query
+          name: stationNumber
+          description: pass an optional number that indicates the id of an station
+          required: false
+          example: 192
+          schema:
+            type: integer
+            format: int32
+        - in: query
+          name: availableBikes
+          description: minimum number of bikes available in the station
+          example: 5
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - in: query
+          name: stationCapacity
+          description: maximum number of bikes in the station
+          example: 20
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - in: query
+          name: stationStatus
+          description: the status of the station
+          required: false
+          schema:
+            type: string
+            enum: [abierta, cerrada, cualquiera]
+        - in: query
+          name: date
+          description: the date to filter the stations' info
+          example: "2023-05-04"
+          required: false
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: hour
+          description: the hour to filter the stations' info
+          required: false
+          schema:
+            type: string
+            pattern: "HH:MM:SS"
+
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StationStatusSerializer'
+        '500':
+          description: bad input parameter or server error
+  /api/stations/nearby:
+    get:
+      tags:
+        - filters
+      summary: shows all the stations nearby
+      operationId: stationsNearby
+      description: |
+        By passing in the appropriate options, you can search for
+        all the stations located nearby and stored in the system
+      parameters:
+        - in: query
+          name: latitude
+          description: your latitud
+          required: true
+          example: 37.418586
+          schema:
+            type: number
+            format: float
+        - in: query
+          name: longitude
+          description: your longitude
+          required: true
+          example: -5.973249
+          schema:
+            type: number
+            format: float
+        - in: query
+          name: radius
+          description: represents the area to search in (measured in kms)
+          required: true
+          example: 50.0
+          schema:
+            type: number
+            format: float
+        - in: query
+          name: availableBikes
+          description: minimum number of bikes available in the station
+          required: false
+          example: 5
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - in: query
+          name: stationCapacity
+          description: maximum number of bikes in the station
+          required: false
+          example: 20
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - in: query
+          name: stationStatus
+          description: the status of the station
+          required: false
+          schema:
+            type: string
+            enum: [abierta, cerrada, cualquiera]
+        - in: query
+          name: limit
+          description: pass the maximum number of responses wanted
+          example: 10
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StationStatusSerializer'
+        '500':
+          description: bad input parameter or server error
+  /api/predictors/mean:
+    get:
+      tags:
+        - predictions
+      summary: predicts the number of available bikes using the mean
+      operationId: predictionsMean
+      description: |
+        By passing in the appropriate options, you can predict for
+        a specific station and a specific datetime the number of available bikes
+      parameters:
+        - in: query
+          name: stationNumber
+          description: pass an optional number that indicates the id of an station
+          required: true
+          example: 192
+          schema:
+            type: integer
+            format: int32
+        - in: query
+          name: date
+          description: the date to predict the stations' info
+          example: "2023-05-04"
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: hour
+          description: the hour to predict the stations' info
+          required: true
+          schema:
+            type: string
+            pattern: "HH:MM:SS"
+
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StationPredictorMeanSerializer'
+        '400':
+          description: bad input parameter or server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/predictors/linear:
+    get:
+      tags:
+        - predictions
+      summary: predicts the number of available bikes using linear regression
+      operationId: predictionsLinear
+      description: |
+        By passing in the appropriate options, you can predict for
+        a specific station and a specific datetime the number of available bikes
+      parameters:
+        - in: query
+          name: stationNumber
+          description: pass an optional number that indicates the id of an station
+          required: true
+          example: 192
+          schema:
+            type: integer
+            format: int32
+        - in: query
+          name: date
+          description: the date to predict the stations' info
+          example: "2023-05-04"
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: hour
+          description: the hour to predict the stations' info
+          required: true
+          schema:
+            type: string
+            pattern: "HH:MM:SS"
+
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StationPredictorLinearSerializer'
+        '400':
+          description: bad input parameter or server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/predictors/nearby:
+    get:
+      tags:
+        - predictions
+      summary: predicts the number of available bikes in the stations around you
+      operationId: predictionsNearby
+      description: |
+        By passing in the appropriate options, you can predict for
+        a specific area and a specific datetime the number of available bikes in stations that are near you
+      parameters:
+        - in: query
+          name: latitude
+          description: your latitud
+          required: true
+          example: 37.418586
+          schema:
+            type: number
+            format: float
+        - in: query
+          name: longitude
+          description: your longitude
+          required: true
+          example: -5.973249
+          schema:
+            type: number
+            format: float
+        - in: query
+          name: radius
+          description: represents the area to search in (measured in kms)
+          required: true
+          example: 50.0
+          schema:
+            type: number
+            format: float
+        - in: query
+          name: date
+          description: the date to predict the stations' info
+          example: "2023-05-04"
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: hour
+          description: the hour to predict the stations' info
+          required: true
+          schema:
+            type: string
+            pattern: "HH:MM:SS"
+        - in: query
+          name: method
+          description: the method used for the prediction
+          required: true
+          schema:
+            type: string
+            enum: [mean, linear]
+        - in: query
+          name: availableBikes
+          description: minimum number of bikes available in the station
+          example: 5
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - in: query
+          name: limit
+          description: pass the maximum number of responses wanted
+          example: 10
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StationPredictorNearbySerializer'
+        '400':
+          description: bad input parameter or server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    StationPredictorNearbySerializer:
+      type: object
+      required:
+        - prediction
+        - station
+      properties:
+        prediction:
+          type: integer
+          format: int32
+          example: 6
+        station:
+          $ref: '#/components/schemas/Station'
+    StationPredictorLinearSerializer:
+      type: object
+      required:
+        - prediction
+        - evolution
+        - linear_function
+        - station
+      properties:
+        prediction:
+          type: array
+          items:
+            type: number
+          example: [1683383400.0, 12]
+        evolution:
+          type: array
+          items:
+            $ref: '#/components/schemas/PointSerializer'
+        linear_function:
+          $ref: '#/components/schemas/LinearFunctionSerializer'
+        station:
+          $ref: '#/components/schemas/Station'
+    LinearFunctionSerializer:
+      type: object
+      required:
+        - coef
+        - intercept
+      properties:
+        coef:
+          type: number
+          format: float
+          example: 1.093093164536141e-05
+        intercept:
+          type: number
+          format: float
+          example: 7.303031295737087
+    StationPredictorMeanSerializer:
+      type: object
+      required:
+        - prediction
+        - evolution
+        - station
+      properties:
+        prediction:
+          type: array
+          items:
+            type: number
+          example: [1683383400.0, 12]
+        evolution:
+          type: array
+          items:
+            $ref: '#/components/schemas/PointSerializer'
+        station:
+          $ref: '#/components/schemas/Station'
+    PointSerializer:
+      type: object
+      required:
+        - x
+        - y
+      properties:
+        x:
+          type: number
+          format: float
+          example: 1682771056.0
+        y:
+          type: number
+          format: float
+          example: 1.0
+    Error:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          example: "This should display a custom error message"
+    StationStatusSerializer:
+      type: object
+      required:
+        - count
+        - next
+        - previous
+        - results
+      properties:
+        count:
+          type: integer
+          format: int32
+          example: 261
+        next:
+          type: integer
+          nullable: true
+          example: null
+        previous:
+          type: integer
+          nullable: true
+          example: null
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/StationStatus'
+    StationStatus:
+      type: object
+      required:
+        - id
+        - available_bikes
+        - total_capacity
+        - is_open
+        - last_updated
+        - station
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: 25515
+        is_open:
+          type: boolean
+          example: true
+        available_bikes:
+          type: integer
+          format: int32
+          example: 18
+        total_capacity:
+          type: integer
+          format: int32
+          example: 20
+        last_updated:
+          type: string
+          format: date-time
+          example: '2023-05-04T19:26:25Z'
+        station:
+          $ref: '#/components/schemas/Station'
+    Station:
+      required:
+        - number
+        - address
+        - location
+      properties:
+        number:
+          type: integer
+          format: int32
+          example: 194
+        address:
+          type: string
+          maxLength: 200
+          example: 'CALLE PARQUE DE DOÑANA - Aprox. Calle Corral de los Olmos'
+        location:
+          type: object
+          required:
+          - type
+          - coordinates
+          properties:
+            type:
+              type: string
+              example: 'Point'
+            coordinates:
+              type: array
+              items:
+                type: number
+                format: float
+              example: [-5.973249,
+                        37.418586]
+
+      type: object

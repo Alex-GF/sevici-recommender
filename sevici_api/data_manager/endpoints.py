@@ -63,7 +63,7 @@ class StationStatusViewSet(generics.ListAPIView):
             query &= Q(available_bikes__gte=wanted_available_bikes)
 
         if wanted_total_bikes:
-            if wanted_total_bikes < 0:
+            if wanted_total_bikes <= 0:
                 raise ValueError("Total bikes must be a positive integer")
             query &= Q(total_capacity__gte=wanted_total_bikes)
             
@@ -168,7 +168,7 @@ class StationStatusNearbyViewSet(generics.ListAPIView):
             query &= Q(available_bikes__gte=wanted_available_bikes)
 
         if wanted_total_bikes:
-            if wanted_total_bikes < 0:
+            if wanted_total_bikes <= 0:
                 raise ValueError("Total bikes must be a positive integer")
             query &= Q(total_capacity__gte=wanted_total_bikes)
 
