@@ -208,6 +208,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+        '500':
+          description: server error
   /api/predictors/linear:
     get:
       tags:
@@ -255,6 +257,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+        '500':
+          description: server error
   /api/predictors/nearby:
     get:
       tags:
@@ -343,6 +347,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+        '500':
+          description: server error
 components:
   schemas:
     StationPredictorNearbySerializer:
