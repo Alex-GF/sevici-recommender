@@ -66,7 +66,6 @@ export default function RegressionGraph({date, hour, stationNumber, width, heigh
           });
         }
         setLinearFunctionPoints(linearPoints);
-        // setFilterValues(values);
         setDataLoaded(true);
       })
       .catch((error) => console.log(error));

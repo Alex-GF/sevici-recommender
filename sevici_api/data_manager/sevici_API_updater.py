@@ -1,9 +1,8 @@
 from django.conf import settings
 from .models import Station, StationStatus
 from django.contrib.gis.geos import Point
-import requests
-from datetime import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
+import requests
 
 URL = "https://api.jcdecaux.com/vls/v3/stations"
 

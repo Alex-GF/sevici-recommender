@@ -62,7 +62,6 @@ const StationFilterByLocation = () => {
     fetch(query)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data.results);
         setPredictedStations(data.results);
         setPositionLoaded(false);
         setPredicted(true);

@@ -9,8 +9,8 @@ from django.contrib.gis.measure import Distance
 from django.contrib.gis.db.models.functions import Distance as DistanceFunc
 from .serializers import StationPredictorLinearSerializer, StationPredictorMeanSerializer, StationPredictorNearbySerializer
 from django.utils import timezone
-import itertools, pytz
 from .utils.LinearRegression import LinearRegression
+import itertools, pytz
 
 @api_view(['GET'])
 @permission_classes((permissions.AllowAny,))

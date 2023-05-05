@@ -50,7 +50,6 @@ export default function MeanGraph({
           y: data.prediction[1],
         });
 
-        // setFilterValues(values);
         setDataLoaded(true);
       })
       .catch((error) => console.log(error));

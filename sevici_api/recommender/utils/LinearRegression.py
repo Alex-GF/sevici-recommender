@@ -1,4 +1,5 @@
 class LinearRegression():
+    
     def __init__(self, x_points, y_points):
         if not x_points:
             raise ValueError("x_points is empty")
@@ -14,12 +15,7 @@ class LinearRegression():
         self.coef = None
         self.intercept = None
         
-    # y = ax + b
-    # a = covarianza(x,y)/varianza(x)
-    # b = media(y) - a*media(x)
-        
     def fit(self):
-        
         a = self._covarianza(self.x_points, self.y_points, self._media(self.x_points), self._media(self.y_points)) / self._varianza(self.x_points, self._media(self.x_points))
         b = self._media(self.y_points) - a * self._media(self.x_points)
         
@@ -27,11 +23,9 @@ class LinearRegression():
         self.intercept = b
     
     def _media(self, x):
-        
         return sum(x) / len(x)
     
     def _covarianza(self, x, y, mean_x, mean_y):
-        
         sumatory = 0
         
         for i in range(len(x)):
@@ -41,7 +35,6 @@ class LinearRegression():
         return sumatory / len(x)
     
     def _varianza(self, x, mean_x):
-        
         sumatory = 0
         
         for i in range(len(x)):

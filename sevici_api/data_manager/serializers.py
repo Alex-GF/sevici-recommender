@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from data_manager.models import Station, StationStatus
 from rest_framework import serializers
 
