@@ -8,7 +8,7 @@ export const predictStationsInputs = [
       type: 'number',
       defaultValue: "",
       isRequired: true,
-      validators: [filterStationsValidators.notNegativeNumber]
+      validators: [filterStationsValidators.notNegativeNumber, filterStationsValidators.notEmptyValidator]
     },
     {
       tag: "Fecha",
@@ -16,7 +16,7 @@ export const predictStationsInputs = [
       type: "date",
       defaultValue: moment().format('YYYY-MM-DD'),
       isRequired: true,
-      validators: [filterStationsValidators.notPastDate, filterStationsValidators.notMoreThanOneWeek]
+      validators: [filterStationsValidators.notPastDate, filterStationsValidators.notMoreThanOneWeek, filterStationsValidators.notEmptyValidator]
     },
     {
       tag: "Hora",
@@ -24,6 +24,6 @@ export const predictStationsInputs = [
       type: "time",
       defaultValue: "23:59",
       isRequired: true,
-      validators: []
+      validators: [filterStationsValidators.notEmptyValidator]
     }
 ]

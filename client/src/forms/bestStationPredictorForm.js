@@ -8,7 +8,7 @@ export const bestStationPredictorInputs = [
       type: 'number',
       defaultValue: "",
       isRequired: true,
-      validators: [filterStationsValidators.notNegativeNumber]
+      validators: [filterStationsValidators.notNegativeNumber, filterStationsValidators.notEmptyValidator]
     },
     {
       tag: 'Radio de búsqueda (km)',
@@ -16,7 +16,7 @@ export const bestStationPredictorInputs = [
       type: 'number',
       defaultValue: "5",
       isRequired: true,
-      validators: [filterStationsValidators.notNegativeNumber]
+      validators: [filterStationsValidators.notNegativeNumber, filterStationsValidators.notEmptyValidator]
     },
     {
       tag: 'Método de predicción',
@@ -25,7 +25,7 @@ export const bestStationPredictorInputs = [
       type: 'select',
       defaultValue: "",
       isRequired: true,
-      validators: [filterStationsValidators.validMethod]
+      validators: [filterStationsValidators.validMethod, filterStationsValidators.notEmptyValidator]
     },
     {
       tag: "Fecha",
@@ -33,7 +33,7 @@ export const bestStationPredictorInputs = [
       type: "date",
       defaultValue: moment().format('YYYY-MM-DD'),
       isRequired: true,
-      validators: []
+      validators: [filterStationsValidators.notEmptyValidator]
     },
     {
       tag: "Hora",
@@ -41,7 +41,7 @@ export const bestStationPredictorInputs = [
       type: "time",
       defaultValue: "23:59",
       isRequired: true,
-      validators: []
+      validators: [filterStationsValidators.notEmptyValidator]
     },
     {
       tag: 'Límite de estaciones a mostrar',
@@ -49,6 +49,6 @@ export const bestStationPredictorInputs = [
       type: 'number',
       defaultValue: "1",
       isRequired: true,
-      validators: [filterStationsValidators.notNegativeOrZeroNumber]
+      validators: [filterStationsValidators.notNegativeOrZeroNumber, filterStationsValidators.notEmptyValidator]
     },
 ]

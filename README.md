@@ -59,7 +59,7 @@ psql postgres
 
 ```
 CREATE DATABASE sevici_db;
-CREATE USER sevici_user WITH ENCRYPTED PASSWORD 'sevici_password';
+CREATE USER sevici_user WITH PASSWORD 'sevici_password';
 GRANT ALL PRIVILEGES ON DATABASE sevici_db TO sevici_user;
 ```
 
@@ -83,7 +83,7 @@ CREATE EXTENSION PostGIS;
 
 3. Accedemos a la carpeta `backend` del proyecto y creamos un archivo `.env` siguiendo el ejemplo del archivo `.env.example`.
 
-- NOTA IMPORTANTE: es necesario contar con una API key de desarrollador en [JCDecaux](https://developer.jcdecaux.com). Sigue los pasos para create una cuenta y activarla. Esta API key deberá colocarla como valor de la variable `API_KEY` en el archivo `.env` del paso 3.
+- NOTA IMPORTANTE: es necesario contar con una API key de desarrollador en [JCDecaux](https://developer.jcdecaux.com). Siga los pasos para crease una cuenta y activarla. Esta API key deberá colocarla como valor de la variable `API_KEY` en el archivo `.env` del paso 3.
 
 4. Instalamos todos los requisitos (recomendamos hacerlo dentro de un entorno virtual):
 
@@ -106,7 +106,7 @@ python manage.py runserver --noreload
 
 ### Frontend
 
-Una vez lanzado el backend, dejamos corriendo la tarea y, desde otra terminal, accedemos a la carpeta `frontend` del proyecto. A continuación:
+Una vez lanzado el backend, dejamos corriendo la tarea y, desde otra terminal, accedemos a la carpeta `client` del proyecto. A continuación:
 
 1. Instalamos el gestor de paquetes `yarn` de manera global en nuestro equipo:
 
@@ -153,9 +153,9 @@ cd sevici-recommender/docker
 
 3. Creamos un archivo `.env` siguiendo el ejemplo del archivo `.env.example`.
 
-- NOTA IMPORTANTE: es necesario contar con una API key de desarrollador en [JCDecaux](https://developer.jcdecaux.com). Sigue los pasos para create una cuenta y activarla. Esta API key deberá colocarla como valor de la variable `API_KEY` en el archivo `.env` del paso 3.
+- NOTA IMPORTANTE: es necesario contar con una API key de desarrollador en [JCDecaux](https://developer.jcdecaux.com). Siga los pasos para crease una cuenta y activarla. Esta API key deberá colocarla como valor de la variable `API_KEY` en el archivo `.env` del paso 3.
 
-- NOTA IMPORTANTE 2: debe tener en cuenta que las variables del archivo `.env.example` cuyos valores se encuentran separados por una barra `/` deben ser sustituidos por un único valor, por ejemplo: `DJANGO_ENV="/production"` en lugar de `DJANGO_ENV="development/production"`.
+- NOTA IMPORTANTE 2: debe tener en cuenta que las variables del archivo `.env.example` cuyos valores se encuentran separados por una barra `/` deben ser sustituidos por un único valor, por ejemplo: `DJANGO_ENV="production"` en lugar de `DJANGO_ENV="development/production"`.
 
 4. Construimos la arquitectura de contenedores con Docker:
 

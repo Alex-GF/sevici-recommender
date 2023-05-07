@@ -32,7 +32,7 @@ export const filterStationByLocationInputs = [
         type: 'number',
         defaultValue: "5",
         isRequired: true,
-        validators: [filterStationsValidators.notNegativeNumber]
+        validators: [filterStationsValidators.notNegativeNumber, filterStationsValidators.notEmptyValidator]
       },
     {
       tag: 'Estado',
