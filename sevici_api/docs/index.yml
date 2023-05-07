@@ -1,7 +1,7 @@
 openapi: 3.0.0
 servers: []
 info:
-  description: This API lets you to monitorize the status of SEVICI's stations in Seville and plan where to find bikes using the predictions module
+  description: This API lets you to monitorize the status of SEVICI's stations in Seville and plan where to find bikes using the predictions module.
   version: "1.0.0"
   title: Bicicator API
   contact:
@@ -27,7 +27,7 @@ paths:
       parameters:
         - in: query
           name: stationNumber
-          description: pass an optional number that indicates the id of an station
+          description:  number that indicates the id of an station
           required: false
           example: 192
           schema:
@@ -72,7 +72,7 @@ paths:
           required: false
           schema:
             type: string
-            pattern: "HH:MM:SS"
+            example: "12:00:00"
 
       responses:
         '200':
@@ -193,7 +193,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: "HH:MM:SS"
+            example: "12:00:00"
 
       responses:
         '200':
@@ -242,7 +242,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: "HH:MM:SS"
+            example: "12:00:00"
 
       responses:
         '200':
@@ -307,7 +307,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: "HH:MM:SS"
+            example: "12:00:00"
         - in: query
           name: method
           description: the method used for the prediction
