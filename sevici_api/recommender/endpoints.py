@@ -147,6 +147,7 @@ def station_predictors_nearby(request):
     
     #availableBikes param (optional)
     min_bikes_param = request.query_params.get('availableBikes', None)
+    min_bikes = None
     if min_bikes_param:
         try:
             min_bikes = int(min_bikes_param)
@@ -217,7 +218,6 @@ def _mean_predictor(station, date, hour):
     penalization = abs((date-timezone.now().date()).days)
     
     avg = round((bikes/total)*(1-penalization*(0.05))) if total else 0
-    
 
     return avg
 
